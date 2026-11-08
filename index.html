@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your Name</title>
+<meta name="description" content="Personal homepage: contact info, a terminal, and a tiny game.">
+<meta name="theme-color" content="#0000AA">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/Web437_IBM_VGA_8x16.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+<script>try{if(!localStorage.getItem('booted')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('booting')}catch(e){}</script>
+<script src="js/content.js" defer></script>
+<script src="js/main.js" defer></script>
+<script src="js/terminal.js" defer></script>
+<script src="js/game.js" defer></script>
+<script src="js/boot.js" defer></script>
+</head>
+<body>
+
+<div id="boot" aria-hidden="true">
+  <pre id="boot-log"></pre>
+  <p class="boot-skip">Press any key or tap to skip</p>
+</div>
+
+<header class="menubar">
+  <nav aria-label="Main">
+    <a href="#"><span class="hk">H</span>ome</a>
+    <a href="#about"><span class="hk">A</span>bout</a>
+    <a href="#contact"><span class="hk">C</span>ontact</a>
+    <a href="#terminal"><span class="hk">T</span>erminal</a>
+    <a href="#game"><span class="hk">G</span>ames</a>
+  </nav>
+  <span class="clock" id="clock" aria-hidden="true"></span>
+</header>
+
+<main id="desk">
+
+  <!-- HOME -->
+  <section class="view" data-route="home" aria-label="Home">
+    <div class="hero">
+      <div class="banner" id="banner"></div>
+      <p class="tagline" data-bind="tagline"></p>
+    </div>
+    <div class="window dialog">
+      <div class="frame">
+        <h1 class="title" tabindex="-1">WELCOME.TXT</h1>
+        <p>Welcome to <span data-bind="name"></span>'s homepage</p>
+        <p class="sub">Est. <span data-bind="year"></span> &middot; best viewed in 80&times;25</p>
+        <nav class="btns" aria-label="Sections">
+          <a class="btn" href="#about">About me</a>
+          <a class="btn" href="#contact">Contact</a>
+          <a class="btn" href="#terminal">Terminal</a>
+          <a class="btn" href="#game">Play WORM.EXE</a>
+        </nav>
+        <div class="rule"></div>
+        <p class="hint"><span class="kb-only">Press F1 for help &middot; ESC returns here</span><span class="touch-only">Tap a button to open a window</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="view" data-route="about" aria-label="About" hidden>
+    <div class="window">
+      <div class="frame">
+        <h2 class="title" tabindex="-1">ABOUT.TXT</h2>
+        <dl class="facts" id="facts"></dl>
+        <div class="rule"></div>
+        <div class="bio" id="bio"></div>
+        <nav class="btns">
+          <a class="btn" href="#contact">Contact</a>
+          <a class="btn" href="#">OK</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="view" data-route="contact" aria-label="Contact" hidden>
+    <div class="window panel">
+      <div class="frame">
+        <h2 class="title" tabindex="-1">C:\CONTACT</h2>
+        <div class="files-head" aria-hidden="true"><span>Name</span><span>Ext</span><span>Where</span></div>
+        <ul class="files" id="contact-list"></ul>
+        <p class="status" id="contact-status" role="status"></p>
+      </div>
+    </div>
+    <nav class="btns on-blue"><a class="btn" href="#">Back</a></nav>
+  </section>
+
+  <!-- TERMINAL -->
+  <section class="view wide" data-route="terminal" aria-label="Terminal" hidden>
+    <div class="window term">
+      <div class="frame">
+        <h2 class="title" tabindex="-1">guest@<span data-bind="handle"></span>: ~</h2>
+        <div class="screen" id="term-screen">
+          <div class="motd">
+            <div class="ln">Welcome to <span data-bind="name"></span>'s homepage (tty1)</div>
+            <div class="ln">Type 'help' for a list of commands.</div>
+            <div class="ln">&nbsp;</div>
+          </div>
+          <div class="out" id="term-out" aria-live="polite"></div>
+          <form class="prompt" id="term-form" autocomplete="off">
+            <label for="term-in" class="ps1"><span class="u">guest@<span data-bind="handle"></span></span>:<span class="p">~</span>$</label>
+            <input id="term-in" name="cmd" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" enterkeyhint="go" data-autofocus>
+          </form>
+        </div>
+        <div class="chips" id="term-chips" aria-label="Quick commands"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section class="view wide" data-route="game" aria-label="WORM.EXE game" hidden>
+    <div class="window game">
+      <div class="frame">
+        <h2 class="title" tabindex="-1">WORM.EXE</h2>
+        <div class="scorebar">
+          <span>SCORE <b id="worm-score">0</b></span>
+          <button class="btn" type="button" id="worm-pause">Pause</button>
+          <span>HI <b id="worm-hi">0</b></span>
+        </div>
+        <div class="board-wrap">
+          <pre class="board" id="worm-board" aria-label="Game board"></pre>
+          <div class="msg" id="worm-msg" aria-live="polite"></div>
+        </div>
+        <div class="dpad" id="worm-dpad" aria-label="Controls">
+          <button type="button" data-dir="up" aria-label="Up">&uarr;</button>
+          <button type="button" data-dir="left" aria-label="Left">&larr;</button>
+          <button type="button" data-dir="down" aria-label="Down">&darr;</button>
+          <button type="button" data-dir="right" aria-label="Right">&rarr;</button>
+        </div>
+        <p class="hint kb-only">Arrows/WASD move &middot; Space pause &middot; Esc quit</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HELP -->
+  <section class="view" data-route="help" aria-label="Help" hidden>
+    <div class="window help">
+      <div class="frame">
+        <h2 class="title" tabindex="-1">HELP</h2>
+        <dl class="keys">
+          <dt>F1</dt><dd>This help screen</dd>
+          <dt>F2</dt><dd>Contact</dd>
+          <dt>F3</dt><dd>Terminal</dd>
+          <dt>F4</dt><dd>WORM.EXE</dd>
+          <dt>ESC</dt><dd>Back to home</dd>
+          <dt>H A C T G</dt><dd>Menu hotkeys</dd>
+          <dt>&larr;&uarr;&darr;&rarr;</dt><dd>Move between buttons</dd>
+        </dl>
+        <p>On a phone? Everything is tappable, including the bar at the bottom.</p>
+        <nav class="btns"><a class="btn" href="#">OK</a></nav>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="fkeys" aria-label="Shortcuts">
+  <button type="button" data-go="help"><kbd>F1</kbd> Help</button>
+  <button type="button" data-go="contact"><kbd>F2</kbd> Contact</button>
+  <button type="button" data-go="terminal"><kbd>F3</kbd> Term</button>
+  <button type="button" data-go="game"><kbd>F4</kbd> Game</button>
+  <button type="button" data-go="home"><kbd>Esc</kbd> Home</button>
+</footer>
+
+</body>
+</html>
